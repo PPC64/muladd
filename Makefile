@@ -3,8 +3,8 @@
 CC=gcc-6
 MAIN_C=main.c
 C_FILES=muladd.c muladd.h
-DBG_FLAGS=-O0 -g
-FLAGS=-O3 -Wall
+DBG_FLAGS=-O0 -Wall -Werror -g -std=c99
+FLAGS=-O3 -Wall -Werror -std=c99
 OUT=main
 ASM=asm
 DBG=dbg
