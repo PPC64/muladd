@@ -68,23 +68,17 @@ int32_t mulAdd(int32_t *out, int32_t *in, int32_t offset, int len, int32_t k, si
      "mtvrwz   %[carry_vector], %[carry]\t\n"
      "vspltw   %[carry_vector], %[carry_vector], 1\t\n"
 
-     "lvx      %[last_in_vector], 0, %[in_scratch]\t\n"
-     "lvsr     %[in_param_vector], 0, %[in_scratch]\t\n"
-     "lvx      %[last_out_vector], 0, %[out_scratch]\t\n"
-     "lvsr     %[out_param_vector], 0, %[out_scratch]\t\n"
     "VLOOP:\t\n"
      "addi     %[in_scratch], %[in_scratch], -16\t\n"
      "addi     %[out_scratch], %[out_scratch], -16\t\n"
 
      // Load in
-     "lvx      %[tmp_vector], 0, %[in_scratch]\t\n"
-     "vperm    %[in_vector], %[last_in_vector], %[tmp_vector], %[in_param_vector]\t\n"
-     "vmr      %[last_in_vector], %[tmp_vector]\t\n"
+     "lxvd2x   %x[in_vector], 0, %[in_scratch]\t\n"
+     "xxswapd  %x[in_vector], %x[in_vector]\t\n"
 
      // Load out
-     "lvx      %[tmp_vector], 0, %[out_scratch]\t\n"
-     "vperm    %[out_vector], %[last_out_vector], %[tmp_vector], %[out_param_vector]\t\n"
-     "vmr      %[last_out_vector], %[tmp_vector]\t\n"
+     "lxvd2x   %x[out_vector], 0, %[out_scratch]\t\n"
+     "xxswapd  %x[out_vector], %x[out_vector]\t\n"
 
      // multiplying 32x32 -> 64
      "vmuleuw  %[mul_res_eve_vector], %[in_vector], %[k_vector]\t\n"
