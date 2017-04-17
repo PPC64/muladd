@@ -121,11 +121,8 @@ int32_t mulAdd(int32_t *out, int32_t *in, int32_t offset, int len, int32_t k, si
      "vperm    %[out_vector], %[out_vector], %[out_vector], %[magic_param_vector]\t\n"
 
      // Update out in memory
-     "vsldoi   %[tmp_vector], %[out_vector], %[out_vector], 8\t\n"
-     "mfvrd    %[tmp], %[tmp_vector]\t\n"
-     "std      %[tmp], 0(%[out_scratch])\t\n"
-     "mfvrd    %[tmp], %[out_vector]\t\n"
-     "std      %[tmp], 8(%[out_scratch])\t\n"
+     "xxswapd    %x[out_vector], %x[out_vector]\t\n"
+     "stxvd2x    %x[out_vector], 0, %[out_scratch]\t\n"
 
      "bdnz     VLOOP\t\n"
 
